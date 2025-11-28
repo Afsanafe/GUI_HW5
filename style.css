@@ -1,0 +1,21 @@
+/* style.css */
+.box {
+    width: 300px; height: 300px;
+    border: 2px dashed #aaa;
+    background: #f9f9f9;
+    float: left; margin: 20px;
+    padding: 10px;
+}
+.card {
+    width: 100px; height: 50px;
+    background: #3498db;
+    color: white;
+    text-align: center;
+    line-height: 50px;
+    cursor: move;
+    margin-bottom: 10px;
+}
+.highlight {
+    border-color: #3498db;
+    background-color: #eaf2f8;
+}

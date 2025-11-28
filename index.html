@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <!-- Specifies the character encoding for the document, wihtout it special characters like emojis and non english words might display incorrectly -->
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <!-- Both the defer and async attributes on the <script> tag are used to load external JS files without bloocking the initial rendering of the HTML page.  -->
+    <!-- defer executes only after the HTML document is fully parsed and before the DOMContentLoaded event, useful for scripts that must run before the content is rendered. -->
+    <!-- Async executes as soon as its finished downloading, which could be before or during HTML parsing, and it doesn't gurarantee execution order. Think of it as "Run the moment you're ready whenever that is." -->
+
+
+    <div id="origin" class="box">
+        <h3>To Do</h3>
+        <div class="card">Item 1</div>
+        <div class="card">Item 2</div>
+    </div>
+
+    <div id="target" class="box">
+        <h3>Done</h3>
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="app.js" defer></script> 
+</body>
+    
+
+</html>
