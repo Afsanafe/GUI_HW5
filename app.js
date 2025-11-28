@@ -7,8 +7,8 @@ $(document).ready(function() {
         helper: "clone"
     });
 
-    // Make the target box accept drops
-    $("#target").droppable({
+    // Both target and origin boxes can accept the cards
+    $("#origin, #target").droppable({
         accept: ".card",
         activeClass: "highlight",
         drop: function(event, ui) {
