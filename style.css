@@ -1,16 +1,51 @@
 /* style.css */
-.box {
-    width: 300px; height: 300px;
-    border: 2px dashed #aaa;
-    background: #f9f9f9;
-    float: left; margin: 20px;
-    padding: 10px;
+.gameBoard {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    width: 1100px;
 }
+
+.holder {
+    width: 500px; height: 200px;
+    background-image: url('graphics_data/scrabble-tile-holder-406774_640.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    float: left; margin: 20px;
+    margin: 20px;
+    padding: 10px;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    /* 💥 NEW: Make the holder a flex container */
+    display: flex;
+    
+    /* The default flex-direction is 'row', which stacks them horizontally */
+    flex-direction: row; 
+    
+    /* Center the cards vertically within the holder's height */
+    align-items: center;
+    /* 💥 NEW: Distribute space equally around the cards */
+    justify-content: space-around;
+}
+
+.board {
+    width: 900px; height: 100px;
+    background-image: url(graphics_data/Scrabble_Board_OneLine.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: 50px;
+    background-repeat: no-repeat;
+}
+
 .card {
     width: 100px; height: 50px;
     background: #3498db;
     color: white;
     text-align: center;
+    flex-direction: horizontal;
     line-height: 50px;
     cursor: move;
     margin-bottom: 10px;
