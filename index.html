@@ -1,36 +1,65 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-    <!-- Specifies the character encoding for the document, wihtout it special characters like emojis and non english words might display incorrectly -->
     <meta charset="UTF-8">
-
-    <link rel="stylesheet" href="style.css">
-
-</head>
-<body>
-    <!-- Both the defer and async attributes on the <script> tag are used to load external JS files without bloocking the initial rendering of the HTML page.  -->
-    <!-- defer executes only after the HTML document is fully parsed and before the DOMContentLoaded event, useful for scripts that must run before the content is rendered. -->
-    <!-- Async executes as soon as its finished downloading, which could be before or during HTML parsing, and it doesn't gurarantee execution order. Think of it as "Run the moment you're ready whenever that is." -->
-
-    <div class="gameBoard">
-        <div id="target" class="board">
-            <h3>Done</h3>
-        </div>
-
-        <div id="origin" class="holder">
-            <h3>To Do</h3>
-            <div class="card">Item 1</div>
-            <div class="card">Item 2</div>
-        </div>
-
-
-    </div>
+    <title>Scrabble Drag-and-Drop</title>
     
+    <link rel="stylesheet" href="styles.css">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-    <script src="app.js" defer></script> 
-</body>
-    
+</head>
+<body>
 
+    <div id="game-container">
+        
+        <div id="header">
+            <h1>Single-Line Scrabble</h1>
+            <div id="score-board">
+                Score: <span id="score-value">0</span>
+            </div>
+        </div>
+
+        <div id="board">
+            <!-- will be used to identify every square as a "drop target" for JS -->
+            <div class="board-slot" id="slot-1"></div>
+            
+            <div class="board-slot bonus-word" id="slot-2">DOUBLE WORD</div>
+            
+            <div class="board-slot" id="slot-3"></div>
+            <div class="board-slot" id="slot-4"></div>
+            
+            <div class="board-slot bonus-letter" id="slot-5">DOUBLE LETTER</div>
+            
+            <div class="board-slot" id="slot-6"></div>
+            <div class="board-slot" id="slot-7"></div>
+        </div>
+
+        <div id="rules">
+            Rules: <br>
+            Create one word with no gap between the letters.<br>
+            The word must contain at least 2 letters.<br>
+            The word must be found in the dictionary.
+        </div>
+
+        <!-- This container will hold the tiles, which we assign the image to -->
+        <div id="rack-container">
+            <div id="rack">
+                </div>
+        </div>
+
+        <div id="controls">
+            <button id="deal-btn">Deal New Tiles</button>
+            <button id="reset-btn">Restart Game</button>
+        </div>
+        
+        <div id="message-area"></div>
+
+    </div>
+
+    <script src="Scrabble_Pieces_AssociativeArray_Jesse.js"></script>
+    
+    <script src="script.js"></script>
+
+</body>
 </html>

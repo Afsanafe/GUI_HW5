@@ -4,7 +4,7 @@ $(document).ready(function() {
     // Make the cards movable
     $(".card").draggable({
         revert: "invalid", // automatically handles the animation of the item snapping back if the user drops it outside the target
-        helper: "clone"    // Leaves the original item in place until the drop is confirmed 
+        // helper: "none"    // Leaves the original item in place until the drop is confirmed 
     });
 
     // Both target and origin boxes can accept the cards
