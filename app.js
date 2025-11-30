@@ -353,6 +353,8 @@ function validateWord() {
         
         // Optional: Reset the board logic here if you want them to play again immediately
         $("#message-area").css("color", "green");
+        // Clear the tiles from the board visually
+        $(".board-slot").empty();
 
     } else {
         message = "Sorry, '" + word + "' is not in the dictionary.";
