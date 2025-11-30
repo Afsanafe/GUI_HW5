@@ -33,50 +33,58 @@ function initializeBoard() {
         tolerance: "intersect", 
         drop: function(event, ui) {
             
-            // Check if the slot is already filled
-            if ($(this).find(".tile").length > 0) {
+            // FIX #1: When checking if the slot is full, ignore the tile we are currently holding.
+            // This allows you to pick up a tile and drop it back in the same spot without it bouncing back.
+            if ($(this).find(".tile").not(ui.draggable).length > 0) {
                 ui.draggable.draggable('option', 'revert', true);
                 return;
             }
 
-            // 1. Detach the tile from the rack
+            // Detach the tile from the rack (or previous slot)
             var tile = ui.draggable.detach();
             
-            // 2. THE FIX: Set position to ABSOLUTE
-            // This takes the tile out of the flow so it sits ON TOP of "Double Word"
+            // FIX #2: Remove margins and center the tile
+            // We set 'top' and 'left' to 0 and 'margin' to 0 so it sits flush in the corner.
+            // If you want it strictly 70px (smaller than the slot), we can center it.
             tile.css({
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',   // Force tile to fill the square
-                height: '100%'
+                position: 'relative',
+                top: 'auto',
+                left: 'auto',
+                width: '80px',    // Restore original smaller size
+                height: '80px',   
+                margin: 0   // Restore the margin so they have breathing room in the rack
             });
             
-            // 3. Append to the slot
             $(this).append(tile);
             
-            // 4. Reset revert
+            // Reset revert so it doesn't bounce back next time
             tile.draggable('option', 'revert', 'invalid');
+
+            // Update score
+            calculateScore();
         }
     });
 
-    // 2. RACK: Handle dragging tiles BACK to the rack
+// 2. RACK: Handle dragging tiles BACK to the rack
     $("#rack").droppable({
         accept: ".tile",
         drop: function(event, ui) {
             var tile = ui.draggable.detach();
             
-            // THE FIX: Revert to RELATIVE
-            // In the rack, we WANT them to sit side-by-side, not stack on top of each other.
+            // FIX #3: Restore the tile to its original "Rack Mode" state
             tile.css({
-                position: 'absolute',
-                top: 'auto',     // Reset these to allow natural flow
+                position: 'relative',
+                top: 'auto',
                 left: 'auto',
-                width: '60px',   // Reset to your original tile size (adjust px as needed)
-                height: '60px'
+                width: '70px',    // Restore original smaller size
+                height: '70px',   
+                margin: 0   // Restore the margin so they have breathing room in the rack
             });
             
             $(this).append(tile);
+
+            // Update score
+            calculateScore();
         }
     });
 }
@@ -173,6 +181,46 @@ function makeTilesDraggable() {
 }
 
 
+function calculateScore() {
+    var roundScore = 0;
+    var wordMultiplier = 1; // Used for "Double Word Score"
+    var word = "";
+
+    // Loop through every slot on the board
+    $(".board-slot").each(function() {
+        var tile = $(this).find(".tile"); // Look for a tile inside
+        
+        // If there is a tile here...
+        if (tile.length > 0) {
+            var letter = tile.attr("data-letter"); // Get 'A'
+            var score = parseInt(tile.attr("data-value")); // Get 1
+            
+            word += letter;
+
+            // CHECK BONUSES 
+            // We look at the slot's ID or class to see if it's special
+            if ($(this).hasClass("bonus-letter")) {
+                score *= 2; // Double Letter Score
+            }
+            if ($(this).hasClass("bonus-word")) {
+                wordMultiplier *= 2; // Double Word Score (applied at end)
+            }
+
+            roundScore += score;
+        }
+    });
+
+    // Apply Word Multipliers
+    roundScore *= wordMultiplier;
+    
+    // Update the UI
+    $("#score-value").text(roundScore);
+    $("#message-area").text("Word Played: " + word + " (" + roundScore + " points)");
+    
+    // Optional: Add roundScore to totalScore global variable here
+}
+
+
 function resetGame() {
     // 1. Clear the rack and board
     $("#rack").empty();
@@ -189,6 +237,12 @@ function resetGame() {
             ScrabbleTiles[key]["number-remaining"] = ScrabbleTiles[key]["original-distribution"];
         }
     }
+
+    // Update the text inside slot-2
+    $("#slot-2").text("DOUBLE WORD");
+
+    // Update the text inside slot-5
+    $("slot-5").text("DOUBLE LETTER")
 
     // 4. Deal a fresh hand
     dealTiles();

@@ -11,7 +11,6 @@ body {
     background-color: #ffffff93;
     margin: 0 auto; /* Centers the game on the screen */
     border-radius: 10px;
-
     box-shadow: inset 0 0 5px rgba(0,0,0,1.1);
 }
 
@@ -50,7 +49,19 @@ body {
 
 /* Bonus Square Styles - matching the colors in the PDF */
 .bonus-word {
-    background-color: #ffb6c1; /* Pink for Double Word */
+display: flex;
+    align-items: center; /* Helpful to center text if you have any */
+    justify-content: center;
+    
+    /* Image setup */
+    background-image: url('graphics_data/Scrabble_Tiles/bonus_double_word.pdf');
+    background-position: center;
+    
+    /* THE FIX: Scales image to fit inside the 90px box */
+    background-size: contain; 
+    
+    /* Prevents the image from repeating if it's smaller than the box */
+    background-repeat: no-repeat;
     color: #8b0000;
 }
 
