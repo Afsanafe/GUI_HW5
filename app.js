@@ -176,6 +176,7 @@ function getRandomTile() {
     return selectedLetter;
 }
 
+
 // Helper to generate a unique ID for each tile DOM element
 function generateID() {
     return Math.floor(Math.random() * 100000);
@@ -198,6 +199,29 @@ function makeTilesDraggable() {
             $(this).css("opacity", "1");
         }
     });
+}
+
+
+function updateRemainingTiles() {
+    var totalTiles = 0;
+
+    // Loop through every letter (A, B, C...) in the data structure
+    for (var key in ScrabbleTiles) {
+        if (ScrabbleTiles.hasOwnProperty(key)) {
+            // Add the current count of this letter to the total
+            totalTiles += ScrabbleTiles[key]["number-remaining"];
+        }
+    }
+
+    // Update the HTML
+    $("#remaining-tiles").text(totalTiles);
+    
+    // Optional: Visual warning when low
+    if (totalTiles === 0) {
+        $("#remaining-tiles").css("color", "red").text("Empty");
+    } else {
+        $("#remaining-tiles").css("color", "black");
+    }
 }
 
 
