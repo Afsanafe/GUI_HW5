@@ -1,13 +1,27 @@
+/* script.js */
 // JavaScript source file that holds the logic for the game
 
-/* app.js */
-
 var totalScore = 0;
+var dictionary = [];
+
+
 
 // This array acts as the "bag" of tiles. 
 // We rely on the 'ScrabbleTiles' global object from the other JS file.
 
 $(document).ready(function() {
+    // Load the text file
+    $.get("words.txt", function(data) {
+        // 1. Split the text file by "new line" characters to get a list
+        // 2. Convert to Upper Case to match your tiles
+        // 3. Filter out empty lines just in case
+        dictionary = data.toUpperCase().split('\n').map(function(word) {
+            return word.trim(); // Removes any invisible spaces/returns
+        });
+        
+        console.log("Dictionary loaded! Word count: " + dictionary.length);
+    });
+
     // 1. Initialize the board (make slots droppable) - we will add this in the next step
     initializeBoard();
     // 2. Deal the first hand of 7 tiles
@@ -20,6 +34,10 @@ $(document).ready(function() {
     
     $("#reset-btn").click(function() {
         resetGame();
+    });
+    // 4. Listener for Submit
+    $("#submit-btn").click(function() {
+        validateWord();
     });
 });
 
@@ -92,6 +110,8 @@ function initializeBoard() {
 
 // Uses the needed amount of tiles.
 function dealTiles() {
+    $(".board-slot").empty(); // Remove tiles from board slots
+    
     var rack = $("#rack");
     var currentTiles = rack.children().length;
     var tilesNeeded = 7 - currentTiles; // Refill up to 7 
@@ -218,6 +238,81 @@ function calculateScore() {
     $("#message-area").text("Word Played: " + word + " (" + roundScore + " points)");
     
     // Optional: Add roundScore to totalScore global variable here
+}
+
+function validateWord() {
+    var word = "";
+    var score = 0;
+    var gapFound = false;
+    var tilesFound = false; // To track if we started finding letters
+    var isInvalid = false;  // To flag if we found a gap
+
+    // 1. Loop through every board slot in order
+    $(".board-slot").each(function() {
+        var tile = $(this).find(".tile");
+
+        // Logic to detect the word and gaps
+        if (tile.length > 0) {
+            // We found a tile!
+            if (gapFound) {
+                // If we previously found a gap, but now found another tile, 
+                // that means the word is broken (e.g., "A _ B").
+                isInvalid = true;
+                return false; // Break the loop
+            }
+            
+            tilesFound = true;
+            var letter = tile.attr("data-letter");
+            word += letter;
+            
+            // (Optional) Simple scoring logic placeholder
+            score += parseInt(tile.attr("data-value")); 
+        } else {
+            // This slot is empty
+            if (tilesFound) {
+                // If we have already found tiles before this empty spot,
+                // we mark that we have hit a "gap".
+                gapFound = true;
+            }
+        }
+    });
+
+    // 2. Run the Validations
+    var message = "";
+    
+    // Check 1: Did they play any tiles?
+    if (word.length === 0) {
+        message = "Please place tiles on the board.";
+    } 
+    // Check 2: Was there a gap?
+    else if (isInvalid) {
+        message = "Error: Word must be continuous (no gaps).";
+    }
+    // Check 3: Is it at least 2 letters? (From your rules HTML)
+    else if (word.length < 2) {
+        message = "Error: Word must be at least 2 letters.";
+    }
+    // Check 4: Is it in the dictionary?
+    else if (dictionary.includes(word)) {
+        message = "Success! '" + word + "' is a valid word. Points: " + score;
+        // Update the global total score
+        totalScore += score;
+        $("#score-value").text(totalScore);
+        
+        // Optional: Lock the board or deal new tiles here
+    } else {
+        message = "Sorry, '" + word + "' is not in the dictionary.";
+    }
+
+    // 3. Display Result
+    $("#message-area").text(message);
+    
+    // Visual feedback (Green for good, Red for bad)
+    if (message.includes("Success")) {
+        $("#message-area").css("color", "green");
+    } else {
+        $("#message-area").css("color", "red");
+    }
 }
 
 
