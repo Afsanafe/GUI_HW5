@@ -156,3 +156,8 @@ button:hover {
 #reset-btn:hover {
     background-color: #d32f2f;
 }
+
+#message-area {
+    margin: 20px;
+    padding: 20px;
+}

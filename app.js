@@ -238,11 +238,11 @@ function resetGame() {
         }
     }
 
-    // Update the text inside slot-2
-    $("#slot-2").text("DOUBLE WORD");
+    // // Update the text inside slot-2
+    // $("#slot-2").text("DOUBLE WORD");
 
-    // Update the text inside slot-5
-    $("slot-5").text("DOUBLE LETTER")
+    // // Update the text inside slot-5
+    // $("slot-5").text("DOUBLE WORD")
 
     // 4. Deal a fresh hand
     dealTiles();
