@@ -158,8 +158,10 @@ function makeTilesDraggable() {
     $(".tile").draggable({
         revert: "invalid",            // Snap back to rack if dropped strictly "nowhere" valid
         cursor: "move",               // Change cursor to indicate dragging
-        snap: ".board-slot, #rack",   // Snap to board slots or back to rack
         stack: ".tile",               // Ensure the dragged tile is always on top
+        // snap: ".board-slot, #rack",   // Snap to board slots or back to rack
+        // snapMode: "inner",            // Only snap to the INSIDE of the box */
+        snapTolerance: 50,            // Increase distance (px) to make the magnet stronger/smoother */
         start: function(event, ui) {
             // Optional: visual effects when dragging starts
             $(this).css("opacity", "0.8"); 

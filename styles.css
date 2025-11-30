@@ -101,7 +101,8 @@ body {
     align-items: center;
     box-sizing: border-box;
     /* Important for jQuery UI dragging to work smoothly */
-    z-index: 10; 
+    /* Allows for tiles to have priority in stacking */
+    z-index: 100; 
 }
 
 /* Style applied by jQuery UI while dragging */
