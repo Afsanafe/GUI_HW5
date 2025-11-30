@@ -242,79 +242,100 @@ function calculateScore() {
 
 function validateWord() {
     var word = "";
-    var score = 0;
+    var roundScore = 0; // Score for this specific word
+    var wordMultiplier = 1; // Default multiplier (increases if we hit a Double Word tile)
+    
     var gapFound = false;
-    var tilesFound = false; // To track if we started finding letters
-    var isInvalid = false;  // To flag if we found a gap
+    var tilesFound = false;
+    var isInvalid = false;
 
     // 1. Loop through every board slot in order
     $(".board-slot").each(function() {
-        var tile = $(this).find(".tile");
+        var slot = $(this);
+        var tile = slot.find(".tile");
 
         // Logic to detect the word and gaps
         if (tile.length > 0) {
             // We found a tile!
             if (gapFound) {
-                // If we previously found a gap, but now found another tile, 
-                // that means the word is broken (e.g., "A _ B").
-                isInvalid = true;
-                return false; // Break the loop
+                isInvalid = true; // Gap detected within the word
+                return false; 
             }
             
             tilesFound = true;
+            
+            // Get Data
             var letter = tile.attr("data-letter");
+            var tileValue = parseInt(tile.attr("data-value"));
+            
+            // --- SCORING LOGIC START ---
+            
+            // Check 1: Double Letter Bonus
+            // If the SLOT has the class 'bonus-letter', double this specific tile's value
+            if (slot.hasClass("bonus-letter")) {
+                tileValue *= 2; 
+            }
+
+            // Add tile value to the round score
+            roundScore += tileValue;
+
+            // Check 2: Double Word Bonus
+            // If the SLOT has the class 'bonus-word', we mark the multiplier to apply at the end
+            if (slot.hasClass("bonus-word")) {
+                wordMultiplier *= 2;
+            }
+            
+            // --- SCORING LOGIC END ---
+
             word += letter;
             
-            // (Optional) Simple scoring logic placeholder
-            score += parseInt(tile.attr("data-value")); 
         } else {
             // This slot is empty
             if (tilesFound) {
-                // If we have already found tiles before this empty spot,
-                // we mark that we have hit a "gap".
                 gapFound = true;
             }
         }
     });
 
+    // Apply the Word Multiplier (e.g., if Double Word was found, multiply total by 2)
+    roundScore = roundScore * wordMultiplier;
+
     // 2. Run the Validations
     var message = "";
     
-    // Check 1: Did they play any tiles?
     if (word.length === 0) {
         message = "Please place tiles on the board.";
+        $("#message-area").css("color", "black");
     } 
-    // Check 2: Was there a gap?
     else if (isInvalid) {
         message = "Error: Word must be continuous (no gaps).";
+        $("#message-area").css("color", "red");
     }
-    // Check 3: Is it at least 2 letters? (From your rules HTML)
     else if (word.length < 2) {
         message = "Error: Word must be at least 2 letters.";
+        $("#message-area").css("color", "red");
     }
-    // Check 4: Is it in the dictionary?
+    // Check Dictionary (Using your array/set)
     else if (dictionary.includes(word)) {
-        message = "Success! '" + word + "' is a valid word. Points: " + score;
-        // Update the global total score
-        totalScore += score;
+        
+        // SUCCESS CASE
+        message = "Success! '" + word + "' is a valid word. Points: " + roundScore;
+        
+        // Update the Global Score
+        totalScore += roundScore;
         $("#score-value").text(totalScore);
         
-        // Optional: Lock the board or deal new tiles here
+        // Optional: Reset the board logic here if you want them to play again immediately
+        $("#message-area").css("color", "green");
+
     } else {
         message = "Sorry, '" + word + "' is not in the dictionary.";
+        $("#message-area").css("color", "red");
     }
 
     // 3. Display Result
     $("#message-area").text(message);
-    
-    // Visual feedback (Green for good, Red for bad)
-    if (message.includes("Success")) {
-        $("#message-area").css("color", "green");
-    } else {
-        $("#message-area").css("color", "red");
-    }
 }
-
 
 function resetGame() {
     // 1. Clear the rack and board
