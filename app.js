@@ -27,46 +27,55 @@ $(document).ready(function() {
 /* script.js - Add this new function */
 
 function initializeBoard() {
-    // 1. Make the board slots droppable targets
+    // 1. BOARD SLOTS: Handle dropping onto the game board
     $(".board-slot").droppable({
-        accept: ".tile", // Only accept elements with class 'tile'
-        tolerance: "intersect", // Drag must overlap slightly to count
+        accept: ".tile",
+        tolerance: "intersect", 
         drop: function(event, ui) {
             
-            // 'this' refers to the board slot we just dropped on
-            var droppedID = $(this).attr("id");
-            
-            // check if the slot is already filled
+            // Check if the slot is already filled
             if ($(this).find(".tile").length > 0) {
-                // If full, revert the tile back to where it came from
                 ui.draggable.draggable('option', 'revert', true);
                 return;
             }
 
-            // SNAP TO GRID LOGIC
-            // 1. Detach the tile from the rack (or previous slot)
+            // 1. Detach the tile from the rack
             var tile = ui.draggable.detach();
             
-            // 2. Clear "top" and "left" styles set by jQuery UI during drag
-            //    This effectively "snaps" it into the new parent container
-            tile.css({top: 0, left: 0, position: 'relative'});
+            // 2. THE FIX: Set position to ABSOLUTE
+            // This takes the tile out of the flow so it sits ON TOP of "Double Word"
+            tile.css({
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',   // Force tile to fill the square
+                height: '100%'
+            });
             
-            // 3. Append the tile to this board slot
+            // 3. Append to the slot
             $(this).append(tile);
             
-            // 4. Reset revert so it doesn't bounce back next time
+            // 4. Reset revert
             tile.draggable('option', 'revert', 'invalid');
         }
     });
 
-    /* Add this to initializeBoard or a new initializeRack function */
-    // 2. Make the Rack a droppable target too
+    // 2. RACK: Handle dragging tiles BACK to the rack
     $("#rack").droppable({
         accept: ".tile",
         drop: function(event, ui) {
-            // Logic is similar: detach and append back to the rack
             var tile = ui.draggable.detach();
-            tile.css({top: 0, left: 0, position: 'relative'});
+            
+            // THE FIX: Revert to RELATIVE
+            // In the rack, we WANT them to sit side-by-side, not stack on top of each other.
+            tile.css({
+                position: 'absolute',
+                top: 'auto',     // Reset these to allow natural flow
+                left: 'auto',
+                width: '60px',   // Reset to your original tile size (adjust px as needed)
+                height: '60px'
+            });
+            
             $(this).append(tile);
         }
     });

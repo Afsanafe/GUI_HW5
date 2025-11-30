@@ -32,12 +32,13 @@ body {
 }
 
 .board-slot {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     background-color: #f4e1d2; /* Standard beige board color */
     border: 1px solid #fff;
     margin: 0 2px;
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
     font-size: 10px;
@@ -96,18 +97,18 @@ body {
 .tile {
     width: 70px;  /* Slightly smaller than the 80px board slot */
     height: 70px;
-    margin: 0 5px;
     cursor: grab;
-    
+    align-items: center;
+    box-sizing: border-box;
     /* Important for jQuery UI dragging to work smoothly */
-    z-index: 100; 
+    z-index: 10; 
 }
 
 /* Style applied by jQuery UI while dragging */
 .ui-draggable-dragging {
     cursor: grabbing;
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5); /* Shadow for lifting effect */
-    transform: scale(1.1); /* Slightly enlarge while dragging */
+    transform: scale(1.5); /* Slightly enlarge while dragging */
 }
 
 
