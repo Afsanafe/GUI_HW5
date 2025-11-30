@@ -144,6 +144,8 @@ function dealTiles() {
         rack.append(tileHTML);
     }
 
+    updateRemainingTiles();
+
     // IMPORTANT: Apply Draggable logic to the NEW tiles
     makeTilesDraggable();
 }
