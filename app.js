@@ -60,6 +60,36 @@ function initializeBoard() {
 
             // Detach the tile from the rack (or previous slot)
             var tile = ui.draggable.detach();
+
+            // --- NEW BLANK TILE LOGIC START ---
+            
+            // Check if the tile is a Blank Tile ("_")
+            var currentLetter = tile.attr("data-letter");
+            
+            if (currentLetter === "_") {
+                // 1. Ask the user for input
+                var input = prompt("What letter should this blank tile represent?");
+                
+                // 2. Validation (Basic) - Ensure they typed something valid
+                if (input) {
+                    var newLetter = input.toUpperCase().charAt(0); // Take first letter, make Uppercase
+                    
+                    // 3. Visual Swap: Change the image to the chosen letter
+                    // Example: graphics_data/Scrabble_Tiles/Scrabble_Tile_A.jpg
+                    var newSrc = "graphics_data/Scrabble_Tiles/Scrabble_Tile_" + newLetter + ".jpg";
+                    tile.attr("src", newSrc);
+                    
+                    // 4. Logic Update: Change the data-letter so the validator sees "A" not "_"
+                    tile.attr("data-letter", newLetter);
+                    
+                    // 5. CRITICAL: Ensure the value stays 0! 
+                    // (The image might look like a 'Z', but a blank tile is always 0 points)
+                    tile.attr("data-value", 0); 
+                    
+                    // Optional: Mark it as a blank visually via CSS class if needed later
+                    tile.addClass("was-blank");
+                }
+            }
             
             // FIX #2: Remove margins and center the tile
             // We set 'top' and 'left' to 0 and 'margin' to 0 so it sits flush in the corner.
