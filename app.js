@@ -1,17 +1,16 @@
-/*
-File: app.js
-Assignment: Create a single board Scrabble game with JavaScript and jQuery plugins.
-*Bonus* utilize a dictionary text file that holds over 400+ thousand words to validate words
-are submitted in the game.
 
-Author: Afsa Nafe
-Affiliation: UMass Lowell, Computer Science Department
-Email: afsa_nafe@student.uml.edu
-Copyright (c) 2025 by Afsa Nafe. 
-All rights reserved. May be freely copied or excerpted for educational purposes 
-with credit to the author.
-Last updated by Afsa Nafe on December 1st, 2025 at 8:12 AM
-*/
+// File: app.js
+// Assignment: Create a single board Scrabble game with JavaScript and jQuery plugins.
+// BONUS: utilize a dictionary text file that holds over 400+ thousand words to validate words
+// are submitted in the game.
+
+// Author: Afsa Nafe
+// Affiliation: UMass Lowell, Computer Science Department
+// Email: afsa_nafe@student.uml.edu
+// Copyright (c) 2025 by Afsa Nafe. 
+// All rights reserved. May be freely copied or excerpted for educational purposes 
+// with credit to the author.
+// Last updated by Afsa Nafe on December 1st, 2025 at 8:12 AM
 // JavaScript source file that holds the logic for the game
 
 var totalScore = 0;
