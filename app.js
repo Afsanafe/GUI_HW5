@@ -78,8 +78,8 @@ function initializeBoard() {
             // Reset revert so it doesn't bounce back next time
             tile.draggable('option', 'revert', 'invalid');
 
-            // Update score
-            calculateScore();
+            // // Update score
+            // calculateScore();
         }
     });
 
@@ -101,8 +101,8 @@ function initializeBoard() {
             
             $(this).append(tile);
 
-            // Update score
-            calculateScore();
+            // // Update score
+            // calculateScore();
         }
     });
 }
@@ -110,21 +110,25 @@ function initializeBoard() {
 
 // Uses the needed amount of tiles.
 function dealTiles() {
-    $(".board-slot").empty(); // Remove tiles from board slots
-    
     var rack = $("#rack");
-    var currentTiles = rack.children().length;
-    var tilesNeeded = 7 - currentTiles; // Refill up to 7 
+    
+    // 1. Count tiles on Rack AND Board
+    var tilesInRack = rack.find(".tile").length;
+    var tilesOnBoard = $(".board-slot").find(".tile").length;
+    
+    var totalTilesInPlay = tilesInRack + tilesOnBoard;
+    var tilesNeeded = 7 - totalTilesInPlay; 
 
-    // Safety check: Don't do anything if rack is full
+    // 2. Safety check: If you have 7 tiles total, DO NOT DEAL.
     if (tilesNeeded <= 0) return;
 
+    // 3. Deal only the specific amount needed
     for (var i = 0; i < tilesNeeded; i++) {
         var randomLetter = getRandomTile();
         
-        // If the bag is empty, stop dealing
         if (randomLetter === null) {
             $("#message-area").text("No more tiles left in the bag!");
+            $("#message-area").css("color", "red");
             break; 
         }
 
