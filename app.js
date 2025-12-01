@@ -1,4 +1,17 @@
-/* script.js */
+/*
+File: app.js
+Assignment: Create a single board Scrabble game with JavaScript and jQuery plugins.
+*Bonus* utilize a dictionary text file that holds over 400+ thousand words to validate words
+are submitted in the game.
+
+Author: Afsa Nafe
+Affiliation: UMass Lowell, Computer Science Department
+Email: afsa_nafe@student.uml.edu
+Copyright (c) 2025 by Afsa Nafe. 
+All rights reserved. May be freely copied or excerpted for educational purposes 
+with credit to the author.
+Last updated by Afsa Nafe on December 1st, 2025 at 8:12 AM
+*/
 // JavaScript source file that holds the logic for the game
 
 var totalScore = 0;
@@ -60,34 +73,43 @@ function initializeBoard() {
 
             // Detach the tile from the rack (or previous slot)
             var tile = ui.draggable.detach();
-
+            
             // --- NEW BLANK TILE LOGIC START ---
-            
-            // Check if the tile is a Blank Tile ("_")
+
             var currentLetter = tile.attr("data-letter");
-            
+
             if (currentLetter === "_") {
-                // 1. Ask the user for input
-                var input = prompt("What letter should this blank tile represent?");
+                var validMove = false;
                 
-                // 2. Validation (Basic) - Ensure they typed something valid
-                if (input) {
-                    var newLetter = input.toUpperCase().charAt(0); // Take first letter, make Uppercase
-                    
-                    // 3. Visual Swap: Change the image to the chosen letter
-                    // Example: graphics_data/Scrabble_Tiles/Scrabble_Tile_A.jpg
-                    var newSrc = "graphics_data/Scrabble_Tiles/Scrabble_Tile_" + newLetter + ".jpg";
-                    tile.attr("src", newSrc);
-                    
-                    // 4. Logic Update: Change the data-letter so the validator sees "A" not "_"
-                    tile.attr("data-letter", newLetter);
-                    
-                    // 5. CRITICAL: Ensure the value stays 0! 
-                    // (The image might look like a 'Z', but a blank tile is always 0 points)
-                    tile.attr("data-value", 0); 
-                    
-                    // Optional: Mark it as a blank visually via CSS class if needed later
-                    tile.addClass("was-blank");
+                // Keep asking until we get a valid letter OR the user hits Cancel
+                while (!validMove) {
+                    var input = prompt("Blank Tile! Enter a letter (A-Z):");
+
+                    // 1. Handle Cancel (input is null)
+                    if (input === null) {
+                        // User cancelled. Move tile back to rack (revert logic)
+                        // Assuming you have a standard rack ID, or you can use ui.sender logic
+                        $("#my-rack-id").append(tile); 
+                        return; // Stop the function
+                    }
+
+                    // 2. Validate: Regex for exactly one letter (case insensitive)
+                    if (/^[a-zA-Z]$/.test(input)) {
+                        
+                        // VALID INPUT! Apply changes
+                        var newLetter = input.toUpperCase();
+                        
+                        var newSrc = "graphics_data/Scrabble_Tiles/Scrabble_Tile_" + newLetter + ".jpg";
+                        tile.attr("src", newSrc);
+                        tile.attr("data-letter", newLetter);
+                        tile.attr("data-value", 0);
+                        tile.addClass("was-blank");
+                        
+                        validMove = true; // Breaks the loop
+                    } else {
+                        // 3. Invalid Input: Show alert and loop triggers again
+                        alert("Invalid input. Please enter exactly one letter from A-Z.");
+                    }
                 }
             }
             
