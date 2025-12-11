@@ -109,7 +109,14 @@ display: flex;
 
 .bonus-letter {
     background-color: #add8e6; /* Light Blue for Double Letter */
-    color: #00008b;
+    background-image: url('graphics_data/Scrabble_Tiles/double_letter_tile.jpeg');
+    background-position: center;
+    
+    /* THE FIX: Scales image to fit inside the 90px box */
+    background-size: contain; 
+    
+    /* Prevents the image from repeating if it's smaller than the box */
+    background-repeat: no-repeat;
 }
 
 
